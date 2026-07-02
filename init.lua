@@ -11,7 +11,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 long_name = "TOME Archipelago Integration"
-short_name = "tomeipelago"
+short_name = "archipelago"
 for_module = "tome"
 version = {1,7,4}
 addon_version = {1,0,0}
