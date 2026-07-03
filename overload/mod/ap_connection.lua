@@ -27,6 +27,10 @@ ap_zone_items["Ring of Blood"] = "ap_zone_hidden_compound"
 ap_zone_items["Golem Graveyard"] = "ap_zone_golem_graveyard"
 ap_zone_items["Mark of the Spellblaze"] = "ap_zone_spellblaze"
 ap_zone_items["Dreadfell"] = "ap_zone_dreadfell"
+ap_zone_items["Reknor"] = "ap_zone_reknor"
+ap_zone_items["Ardhungol"] = "ap_zone_ardhungol"
+ap_zone_items["Flooded Cave"] = "ap_zone_flooded_cave"
+ap_zone_items["Tannen"] = "ap_npc_tannen"
 
 
 module("mod.ap_connection", package.seeall, class.make)
@@ -154,6 +158,8 @@ function give_item(item_name)
       game.player.unused_stats = (game.player.unused_stats or 0) + 1
    elseif item_name == "Extra Life" then
       game.player.easy_mode_lifes = (game.player.easy_mode_lifes or 0) + 1
+   elseif item_name == "Level Up" then
+      game.player:forceLevelup(game.player.level + 1)
    else
       game.log(item_name .. " is an unknown item!")
    end

@@ -127,6 +127,38 @@ class:bindHook('Entity:loadList', function(self, data)
 	end
      end
   end
+  if data.file == '/data/general/encounters/fareast.lua' then
+     for i, e in ipairs(data.res) do
+	if e.name == "Underwater Cave" then
+	   e.on_encounter = function(self, who)
+		local x, y = self:findSpotGeneric(who, function(map, x, y) local enc = map:checkAllEntities(x, y, "can_encounter") return enc and enc == "water" end)
+		if not x then return end
+
+		local g = game.level.map(x, y, engine.Map.TERRAIN):cloneFull()
+		g:removeAllMOs()
+		g.name = _t"Entrance to an underwater cave"
+		g.display='>' g.color_r=colors.AQUAMARINE.r g.color_g=colors.AQUAMARINE.g g.color_b=colors.AQUAMARINE.b g.notice = true
+		g.change_level=1 g.change_zone="flooded-cave" g.glow=true
+		g.add_displays = g.add_displays or {}
+		g.add_displays[#g.add_displays+1] = mod.class.Grid.new{image="terrain/underwater/subsea_cave_entrance_01.png", z=4, display_h=2, display_y=-1}
+		g.does_block_move = nil
+		g.change_level_check = function()
+		   local p = game.party:findMember{main=true}
+		   if p.ap_zone_flooded_cave then
+		      return false
+		   end
+		   game.log("You need to receive Flooded Cave from the multiworld.")
+		   return true
+		end
+		g:altered()
+		g:initGlow()
+		game.zone:addEntity(game.level, g, "terrain", x, y)
+		game.logPlayer(who, "#LIGHT_BLUE#You notice an entrance to an underwater cave.")
+		return true
+	   end
+	end
+     end
+  end
   if data.file == '/data/zones/wilderness/grids.lua' then
      for i, e in ipairs(data.res) do
 	-- Just like above closures aren't allowed here either, so
@@ -221,6 +253,27 @@ class:bindHook('Entity:loadList', function(self, data)
 	      return true
 	   end
 	end
+	if e.define_as == "ARDHUNGOL" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_ardhungol then
+		 return false
+	      end
+	      game.log("You need to receive Ardhungol from the multiworld.")
+	      return true
+	   end
+	end
+	if e.define_as == "REKNOR" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_reknor then
+		 return false
+	      end
+	      game.log("You need to receive Reknor from the multiworld.")
+	      return true
+	   end
+	end
+
      end
   end
 end)
