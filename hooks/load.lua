@@ -125,6 +125,33 @@ class:bindHook('Entity:loadList', function(self, data)
 		return true
 	   end
 	end
+	if e.name == "Ancient Elven Ruins" then
+	   e.on_encounter = function(self, who)
+		local x, y = self:findSpot(who)
+		if not x then return end
+
+		local g = game.level.map(x, y, engine.Map.TERRAIN):cloneFull()
+		g.name = _t"Entrance to some ancient elven ruins"
+		g.display='>' g.color_r=0 g.color_g=255 g.color_b=255 g.notice = true
+		g.change_level=1 g.change_zone="ancient-elven-ruins" g.glow=true
+		g.add_displays = g.add_displays or {}
+		g.add_displays[#g.add_displays+1] = mod.class.Grid.new{image="terrain/dungeon_entrance_closed02.png", z=5}
+		g.change_level_check = function()
+		   local p = game.party:findMember{main=true}
+		   if p.ap_zone_elven_ruins then
+		      return false
+		   end
+		   game.log("You need to receive Elven Ruins from the multiworld.")
+		   return true
+		end
+
+		g:altered()
+		g:initGlow()
+		game.zone:addEntity(game.level, g, "terrain", x, y)
+		print("[WORLDMAP] Elven ruins at", x, y)
+		return true
+	   end
+	end
      end
   end
   if data.file == '/data/general/encounters/fareast.lua' then
@@ -154,6 +181,31 @@ class:bindHook('Entity:loadList', function(self, data)
 		g:initGlow()
 		game.zone:addEntity(game.level, g, "terrain", x, y)
 		game.logPlayer(who, "#LIGHT_BLUE#You notice an entrance to an underwater cave.")
+		return true
+	   end
+	end
+	if e.name == "Shadow Crypt" then
+	   e.on_encounter = function(self, who)
+		local x, y = self:findSpot(who)
+		if not x then return end
+
+		local g = game.level.map(x, y, engine.Map.TERRAIN):cloneFull()
+		g.name = _t"Entrance to a dark crypt"
+		g.display='>' g.color_r=128 g.color_g=128 g.color_b=128 g.notice = true
+		g.change_level=1 g.change_zone="shadow-crypt" g.glow=true
+		g.add_displays = g.add_displays or {}
+		g.add_displays[#g.add_displays+1] = mod.class.Grid.new{image="terrain/dungeon_entrance_closed02.png", z=5}
+		g.change_level_check = function()
+		   local p = game.party:findMember{main=true}
+		   if p.ap_zone_shadow_crypt then
+		      return false
+		   end
+		   game.log("You need to receive Shadow Crypt from the multiworld.")
+		   return true
+		end
+		g:altered()
+		g:initGlow()
+		game.zone:addEntity(game.level, g, "terrain", x, y)
 		return true
 	   end
 	end
@@ -273,7 +325,56 @@ class:bindHook('Entity:loadList', function(self, data)
 	      return true
 	   end
 	end
-
+	if e.define_as == "ERUAN" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_eruan then
+		 return false
+	      end
+	      game.log("You need to receive Erúan from the multiworld.")
+	      return true
+	   end
+	end
+	if e.define_as == "VOR_PRIDE" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_vor_pride then
+		 return false
+	      end
+	      game.log("You need to receive Vor Pride from the multiworld.")
+	      return true
+	   end
+	end
+	if e.define_as == "RAK_SHOR_PRIDE" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_rakshor_pride then
+		 return false
+	      end
+	      game.log("You need to receive Rak'Shor Pride from the multiworld.")
+	      return true
+	   end
+	end
+	if e.define_as == "GORBAT_PRIDE" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_gorbat_pride then
+		 return false
+	      end
+	      game.log("You need to receive Gorbat Pride from the multiworld.")
+	      return true
+	   end
+	end
+	if e.define_as == "GRUSHNAK_PRIDE" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_grushnak_pride then
+		 return false
+	      end
+	      game.log("You need to receive Grushnak Pride from the multiworld.")
+	      return true
+	   end
+	end
      end
   end
 end)

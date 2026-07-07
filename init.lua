@@ -13,7 +13,7 @@
 long_name = "TOME Archipelago Integration"
 short_name = "archipelago"
 for_module = "tome"
-version = {1,7,4}
+version = {1,7,6}
 addon_version = {1,0,0}
 weight = 1
 author = { "Mabel", "danmakubee@gmail.com" }

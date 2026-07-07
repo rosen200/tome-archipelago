@@ -31,6 +31,13 @@ ap_zone_items["Reknor"] = "ap_zone_reknor"
 ap_zone_items["Ardhungol"] = "ap_zone_ardhungol"
 ap_zone_items["Flooded Cave"] = "ap_zone_flooded_cave"
 ap_zone_items["Tannen"] = "ap_npc_tannen"
+ap_zone_items["Elven Ruins"] = "ap_zone_elven_ruins"
+ap_zone_items["Shadow Crypt"] = "ap_zone_shadow_crypt"
+ap_zone_items["Vor Pride"] = "ap_zone_vor_pride"
+ap_zone_items["Gorbat Pride"] = "ap_zone_gorbat_pride"
+ap_zone_items["Rak'Shor Pride"] = "ap_zone_rakshor_pride"
+ap_zone_items["Grushnak Pride"] = "ap_zone_grushnak_pride"
+ap_zone_items["Erúan"] = "ap_zone_eruan"
 
 
 module("mod.ap_connection", package.seeall, class.make)
