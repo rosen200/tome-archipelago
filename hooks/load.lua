@@ -215,6 +215,36 @@ class:bindHook('Entity:loadList', function(self, data)
      for i, e in ipairs(data.res) do
 	-- Just like above closures aren't allowed here either, so
 	-- writing a function to make these functions isn't possible.
+	if e.define_as == "TROLLMIRE" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_trollmire then
+		 return false
+	      end
+	      game.log("You need to receive Trollmire from the multiworld.")
+	      return true
+	   end
+	end
+	if e.define_as == "NORGOS_LAIR" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_norgos_lair then
+		 return false
+	      end
+	      game.log("You need to receive Norgos' Lair from the multiworld.")
+	      return true
+	   end
+	end
+	if e.define_as == "SCINTILLATING_CAVES" then
+	   e.change_level_check = function()
+	      local p = game.party:findMember{main=true}
+	      if p.ap_zone_scintillating_caves then
+		 return false
+	      end
+	      game.log("You need to receive Scintillating Caves from the multiworld.")
+	      return true
+	   end
+	end
 	if e.define_as == "KOR_PUL" then
 	   e.change_level_check = function()
 	      local p = game.party:findMember{main=true}

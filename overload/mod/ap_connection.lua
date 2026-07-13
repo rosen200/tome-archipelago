@@ -14,6 +14,9 @@ local class = require "class"
 local socket = require("socket")
 
 local ap_zone_items = {}
+ap_zone_items["Trollmire"] = "ap_zone_trollmire"
+ap_zone_items["Scintillating Caves"] = "ap_zone_scintillating_caves"
+ap_zone_items["Norgos' Lair"] = "ap_zone_norgos_lair"
 ap_zone_items["Kor'Pul"] = "ap_zone_korpul"
 ap_zone_items["Rhaloren Camp"] = "ap_zone_rhaloren_camp"
 ap_zone_items["Heart of the Gloom"] = "ap_zone_heart_gloom"
@@ -44,7 +47,7 @@ module("mod.ap_connection", package.seeall, class.make)
 
 function connect_to_client()
    ap_socket = socket.tcp()
-   ap_socket:settimeout(1000)
+   ap_socket:settimeout(60)
    local connection_success, err = ap_socket:connect("localhost", 31821)
    if not connection_success then
       ap_socket = nil
