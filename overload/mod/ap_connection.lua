@@ -41,13 +41,14 @@ ap_zone_items["Gorbat Pride"] = "ap_zone_gorbat_pride"
 ap_zone_items["Rak'Shor Pride"] = "ap_zone_rakshor_pride"
 ap_zone_items["Grushnak Pride"] = "ap_zone_grushnak_pride"
 ap_zone_items["Erúan"] = "ap_zone_eruan"
+ap_zone_items["Bonus Zone"] = "ap_zone_bonus_zone"
 
 
 module("mod.ap_connection", package.seeall, class.make)
 
 function connect_to_client()
    ap_socket = socket.tcp()
-   ap_socket:settimeout(60)
+   ap_socket:settimeout(30)
    local connection_success, err = ap_socket:connect("localhost", 31821)
    if not connection_success then
       ap_socket = nil
@@ -73,7 +74,7 @@ end
 -- Proper Mutexes don't appear available, this guard variable will have to do.
 local ap_syncing = false
    
-function ap_sync()
+function ap_sync_send()
    if not ap_socket then
       game.log("Archipelago failed to connect. Reload your save file to retry.")
       return
@@ -106,6 +107,14 @@ function ap_sync()
       ap_syncing = false
       return
    end
+   send_all_locations()
+end
+
+function ap_sync_receive()
+   if not ap_socket then
+      -- Disconnect will have been logged by the send function.
+      return
+   end
    local message, err = ap_socket:receive()
    if not message then
       game.log("Failed to receive items: " .. err)
@@ -130,7 +139,6 @@ function ap_sync()
       local item_name = assert(message:match"^APITEM (.*)")
       give_item(item_name)
    end
-   send_all_locations()
    ap_syncing = false
 end
 

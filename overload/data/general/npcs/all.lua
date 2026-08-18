@@ -29,7 +29,10 @@ local loadIfNot = function(f)
    if not entity_mod then
       todo[#todo+1] = {f=f, mod=entity_mod}
    else
-      todo[#todo+1] = {f=f, mod=function(e) e.rarity=nil end}
+      todo[#todo+1] = {f=f, mod=function(e)
+			  e.shade_rarity = e.rarity
+			  e.rarity=nil
+		      end}
    end
 end
 

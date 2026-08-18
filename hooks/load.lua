@@ -17,6 +17,49 @@ local ap_connection = require("mod.ap_connection")
 class:bindHook("ToME:load", ap_connection.connect_to_client)
 
 class:bindHook('Entity:loadList', function(self, data)
+  if data.file == "/data/zones/tannen-tower/npcs.lua" then
+     self:loadList("/data/general/npcs/multihued-drake.lua", data.no_default, data.res, data.mod, data.loaded)
+     self:loadList("/data/general/npcs/major-demon.lua", data.no_default, data.res, data.mod, data.loaded)
+     self:loadList("/data/general/npcs/minor-demon.lua", data.no_default, data.res, data.mod, data.loaded)
+  end
+  if data.file == '/data/lore/age-allure.lua' then
+     for i, e in ipairs(data.res) do
+	if e.id == "conclave-vault-start" then
+	   e.on_learn = function(who)
+		if not game:isCampaign("Maj'Eyal") then return end
+		if not game.state.can_conclave_vault then return end
+		game:onLevelLoad("wilderness-1", function(zone, level)
+			local spot = game.level:pickSpot{type="world-encounter", subtype="conclave-vault"}
+			if not spot then return end
+
+			local g = game.level.map(spot.x, spot.y, engine.Map.TERRAIN):cloneFull()
+			g.name = _t"Door to an old Conclave vault"
+			g.display='>' g.color_r=100 g.color_g=0 g.color_b=255 g.notice = true
+			g.change_level=1 g.change_zone="conclave-vault" g.glow=true
+			g.add_displays = g.add_displays or {}
+			g.add_displays[#g.add_displays+1] = mod.class.Grid.new{image="terrain/dungeon_entrance02.png", z=5}
+			g.change_level_check = function()
+			   local p = game.party:findMember{main=true}
+			   if p.ap_zone_bonus_zone then
+			      return false
+			   end
+			   game.log("You need to receive Bonus Zone from the multiworld.")
+			   return true
+			end
+			g:altered()
+			g:initGlow()
+			g.on_move = function(self, x, y, who)
+				if not who or not who.player then return end
+				self.on_move = nil
+				require("engine.ui.Dialog"):simpleLongPopup(_t"Conclave Vault", _t[[Arriving at the location given by the coordinates, you see an enormous crack in the ground; peering down, the gleam of exposed metal catches your eye, and you recognize it as a massive door.  It would seem that the Cataclysm's tectonic upheaval has carved a path right to one of its entrances, bypassing the ruined tunnels entirely. You climb down, just outside the door.]], 400)
+			end
+			game.zone:addEntity(game.level, g, "terrain", spot.x, spot.y)
+			print("[WORLDMAP] conclave vault at", spot.x, spot.y)
+		end)
+	   end
+	end
+     end
+  end
   if data.file == '/data/general/encounters/maj-eyal.lua' then
      for i, e in ipairs(data.res) do
 	-- Closures do not work here, don't try to make a higher order

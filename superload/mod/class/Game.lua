@@ -15,6 +15,7 @@ local ap_connection = require("mod.ap_connection")
 
 local base_changelevel = _M.changeLevel
 function _M:changeLevel(lev, zone, params)
+   ap_connection.ap_sync_send()
    base_changelevel(self, lev, zone, params)
-   ap_connection.ap_sync()
+   ap_connection.ap_sync_receive()
 end
